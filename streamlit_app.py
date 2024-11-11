@@ -1,20 +1,32 @@
-# Import python packages
+# Import required packages
 import streamlit as st
+from snowflake.snowpark.session import Session
 from snowflake.snowpark.functions import col
+
+# Define Snowflake connection parameters using Streamlit secrets
+connection_parameters = {
+    "account": st.secrets["SNOWFLAKE_ACCOUNT"],
+    "user": st.secrets["SNOWFLAKE_USER"],
+    "password": st.secrets["SNOWFLAKE_PASSWORD"],
+    "role": st.secrets["SNOWFLAKE_ROLE"],
+    "warehouse": st.secrets["SNOWFLAKE_WAREHOUSE"],
+    "database": st.secrets["SNOWFLAKE_DATABASE"],
+    "schema": st.secrets["SNOWFLAKE_SCHEMA"]
+}
+
+# Establish Snowflake session
+session = Session.builder.configs(connection_parameters).create()
 
 # Write directly to the app
 st.title(":cup_with_straw: Customize Your Smoothie! :cup_with_straw:")
-st.write("""
-**Choose the fruits you want in your custom Smoothie!**
-""")
+st.write("**Choose the fruits you want in your custom Smoothie!**")
 
 # Input for the name on the smoothies
 name_on_order = st.text_input('Name on Smoothie:')
 st.write('The name on your Smoothie will be:', name_on_order)
 
-# Establish Snowflake session
-session = get_active_session()
-my_dataframe = session.table("smoothies.public.fruit_options").select(col("FRUIT_NAME")).to_pandas()
+# Fetch fruit options from Snowflake
+my_dataframe = session.table("fruit_options").select(col("FRUIT_NAME")).to_pandas()
 
 # Ingredients selection
 ingredients_list = st.multiselect(
