@@ -3,15 +3,15 @@ import streamlit as st
 from snowflake.snowpark.session import Session
 from snowflake.snowpark.functions import col
 
-# Define Snowflake connection parameters using Streamlit secrets
+# Define Snowflake connection parameters using nested Streamlit secrets
 connection_parameters = {
-    "account": st.secrets["SNOWFLAKE_ACCOUNT"],
-    "user": st.secrets["SNOWFLAKE_USER"],
-    "password": st.secrets["SNOWFLAKE_PASSWORD"],
-    "role": st.secrets["SNOWFLAKE_ROLE"],
-    "warehouse": st.secrets["SNOWFLAKE_WAREHOUSE"],
-    "database": st.secrets["SNOWFLAKE_DATABASE"],
-    "schema": st.secrets["SNOWFLAKE_SCHEMA"]
+    "account": st.secrets["connections"]["snowflake"]["account"],
+    "user": st.secrets["connections"]["snowflake"]["user"],
+    "password": st.secrets["connections"]["snowflake"]["password"],
+    "role": st.secrets["connections"]["snowflake"]["role"],
+    "warehouse": st.secrets["connections"]["snowflake"]["warehouse"],
+    "database": st.secrets["connections"]["snowflake"]["database"],
+    "schema": st.secrets["connections"]["snowflake"]["schema"]
 }
 
 # Establish Snowflake session
